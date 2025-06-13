@@ -2,21 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Trystero Chat</title>
+  <title>Trystero WebRTC 診斷工具</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; }
+    code { background: #eee; padding: 2px 4px; border-radius: 4px; }
+    .log { white-space: pre-wrap; background: #f7f7f7; padding: 1em; border-radius: 6px; margin-top: 1em; }
+  </style>
 </head>
 <body>
-  <h1>🗨️ Trystero P2P Chat</h1>
+  <h1>🔍 Trystero / WebRTC 診斷工具</h1>
 
-  <div id="status">
-    🔌 Status: <span id="connStatus">Connecting...</span><br>
-    👥 Peers: <span id="peerCount">0</span>
-  </div>
+  <p>這個頁面會幫助你測試：</p>
+  <ul>
+    <li>是否連到 <strong>WebTorrent tracker</strong></li>
+    <li>是否能產生 <strong>WebRTC ICE candidate</strong></li>
+    <li>是否有連上其他 peer</li>
+  </ul>
 
-  <div id="chat" style="margin-top: 1em;"></div>
+  <div><strong>Peer ID:</strong> <code id="peerId">loading...</code></div>
+  <div><strong>Status:</strong> <code id="status">Connecting...</code></div>
+  <div><strong>Connected Peers:</strong> <code id="peerCount">0</code></div>
 
-  <input type="text" id="msgInput" placeholder="Enter message..." />
-  <button id="sendBtn">Send</button>
+  <div class="log" id="log"></div>
 
-  <script type="module" src="main.js"></script>
+  <script type="module" src="diagnostic.js"></script>
 </body>
 </html>

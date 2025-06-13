@@ -1,6 +1,6 @@
 import { joinRoom } from './trystero-torrent.min.js';
-const config = {appId: 'learn-trystero'}
-const room = joinRoom(config, 'p2p-chat-room');
+const config = {appId: 'learn-2d'}
+const room = joinRoom(config, 'web-discover')
 
 const chatDiv = document.getElementById('chat');
 const msgInput = document.getElementById('msgInput');

@@ -1,35 +1,83 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trystero Torrent 聊天示範</title>
-  <link rel="stylesheet" href="styles.css">
-  <script type="module">
-  import {joinRoom} from './trystero-torrent.min.js'
-</script>
+  <meta charset="UTF-8" />
+  <title>Trystero Chat Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+    }
+    #messages {
+      border: 1px solid #ccc;
+      height: 300px;
+      overflow-y: scroll;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Trystero Torrent 聊天示範</h1>
-    
-    <div class="room-controls">
-      <input type="text" id="roomInput" placeholder="輸入房間名稱">
-      <button id="joinBtn">加入房間</button>
-    </div>
-    
-    <div id="chatContainer" class="hidden">
-      <div id="messages"></div>
-      <div class="message-input">
-        <input type="text" id="messageInput" placeholder="輸入訊息...">
-        <button id="sendBtn">傳送</button>
-      </div>
-    </div>
-    
-    <div id="peerCount">房間人數: 0</div>
-    <div id="torrentStatus" class="hidden">Torrent 連線狀態: <span id="torrentStatusText">等待中...</span></div>
-  </div>
-  
-  <script src="script.js"></script>
+  <h1>🗨️ Trystero Chat</h1>
+  <p>Room Name: <input id="roomName" value="demo-room" /></p>
+  <div id="messages"></div>
+  <input type="text" id="messageInput" placeholder="Type a message..." />
+  <button onclick="sendMessage()">Send</button>
+
+  <script type="module">
+    import { joinRoom } from 'https://unpkg.com/trystero/simple.mjs'
+
+    const roomInput = document.getElementById('roomName')
+    const messages = document.getElementById('messages')
+    const messageInput = document.getElementById('messageInput')
+
+    let send
+
+    function logMessage(msg, from = 'You') {
+      const p = document.createElement('p')
+      p.textContent = `${from}: ${msg}`
+      messages.appendChild(p)
+      messages.scrollTop = messages.scrollHeight
+    }
+
+    function setupRoom(roomName) {
+      const config = {} // uses default WebTorrent signaling servers
+      const { send: _send, onPeerJoin, onPeerLeave, onMessage } = joinRoom({ appId: 'trystero-demo', room: roomName }, config)
+
+      send = _send('chat')
+
+      onMessage('chat', (msg, peerId) => {
+        logMessage(msg, `Peer ${peerId.slice(0, 4)}`)
+      })
+
+      onPeerJoin(peerId => {
+        logMessage(`Peer ${peerId.slice(0, 4)} joined the room`, 'System')
+      })
+
+      onPeerLeave(peerId => {
+        logMessage(`Peer ${peerId.slice(0, 4)} left the room`, 'System')
+      })
+    }
+
+    function sendMessage() {
+      const msg = messageInput.value
+      if (!msg || !send) return
+      send(msg)
+      logMessage(msg)
+      messageInput.value = ''
+    }
+
+    // Auto-join default room
+    setupRoom(roomInput.value)
+
+    roomInput.addEventListener('change', () => {
+      location.reload() // simple way to rejoin new room
+    })
+  </script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+import { joinRoom } from './trystero-torrent.min.js';
+
+const config = {}; // 可以填入 WebTorrent 設定（通常不用）
+const room = joinRoom(config, 'p2p-chat-room');
+
+const chatDiv = document.getElementById('chat');
+const msgInput = document.getElementById('msgInput');
+const sendBtn = document.getElementById('sendBtn');
+
+const [sendMsg, onMsg] = room.makeAction('chat-message');
+
+// 顯示接收到的訊息
+onMsg((msg, peerId) => {
+  const p = document.createElement('p');
+  p.textContent = `👤 ${peerId.slice(0, 6)}: ${msg}`;
+  chatDiv.appendChild(p);
+});
+
+// 傳送訊息
+sendBtn.addEventListener('click', () => {
+  const msg = msgInput.value.trim();
+  if (msg) {
+    sendMsg(msg);
+    const p = document.createElement('p');
+    p.textContent = `🧑‍💻 You: ${msg}`;
+    chatDiv.appendChild(p);
+    msgInput.value = '';
+  }
+});

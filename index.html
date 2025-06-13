@@ -31,53 +31,12 @@
 
   <script type="module">
     import { joinRoom } from './trystero-torrent.min.js'
+    import {selfId} from 'trystero'
 
-    const roomInput = document.getElementById('roomName')
-    const messages = document.getElementById('messages')
-    const messageInput = document.getElementById('messageInput')
-
-    let send
-
-    function logMessage(msg, from = 'You') {
-      const p = document.createElement('p')
-      p.textContent = `${from}: ${msg}`
-      messages.appendChild(p)
-      messages.scrollTop = messages.scrollHeight
-    }
-
-    function setupRoom(roomName) {
-      const config = {} // uses default WebTorrent signaling servers
-      const { send: _send, onPeerJoin, onPeerLeave, onMessage } = joinRoom({ appId: 'trystero-demo', room: roomName }, config)
-
-      send = _send('chat')
-
-      onMessage('chat', (msg, peerId) => {
-        logMessage(msg, `Peer ${peerId.slice(0, 4)}`)
-      })
-
-      onPeerJoin(peerId => {
-        logMessage(`Peer ${peerId.slice(0, 4)} joined the room`, 'System')
-      })
-
-      onPeerLeave(peerId => {
-        logMessage(`Peer ${peerId.slice(0, 4)} left the room`, 'System')
-      })
-    }
-
-    function sendMessage() {
-      const msg = messageInput.value
-      if (!msg || !send) return
-      send(msg)
-      logMessage(msg)
-      messageInput.value = ''
-    }
-
-    // Auto-join default room
-    setupRoom(roomInput.value)
-
-    roomInput.addEventListener('change', () => {
-      location.reload() // simple way to rejoin new room
-    })
+    console.log(`my peer ID is ${selfId}`)
+    room.onPeerJoin(peerId => console.log(`${peerId} joined`))
+    room.onPeerLeave(peerId => console.log(`${peerId} left`))
+   
   </script>
 </body>
 </html>

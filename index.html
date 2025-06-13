@@ -34,6 +34,10 @@
     import { joinRoom } from './trystero-torrent.min.js'
     const config = {appId: 'webrtc-discover-2D'}
     const room = joinRoom(config, 'discover')
+    const roomInput = document.getElementById('roomName')
+    const messages = document.getElementById('messages')
+    const messageInput = document.getElementById('messageInput')
+    const status = document.getElementById('connectionStatus')
     let send
     let peerCount = 0
     room.onPeerJoin(peerId => console.log(`${peerId} joined`))

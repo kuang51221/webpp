@@ -31,7 +31,8 @@
 
   <script type="module">
     import { joinRoom } from './trystero-torrent.min.js'
-  
+    const config = {appId: 'webrtc-discover-2D'}
+    const room = joinRoom(config, 'discover')
     room.onPeerJoin(peerId => console.log(`${peerId} joined`))
     room.onPeerLeave(peerId => console.log(`${peerId} left`))
    

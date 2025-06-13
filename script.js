@@ -1,7 +1,7 @@
 // 配置 Firebase (Trystero 的后端之一)
 const config = {
   appId: 'https://netdot-2a73d-default-rtdb.firebaseio.com/', // 你可以更改这个ID
-  rootPath: 'trystero-demo'
+  rootPath: 'webpp'
 };
 
 // 选择 Firebase 作为连接方式

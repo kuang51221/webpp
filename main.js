@@ -1,57 +1,77 @@
 import { joinRoom } from './trystero-torrent.min.js';
-const config = {appId: 'learn-2d'}
-const room = joinRoom(config, 'web-discover')
+//const config = {appId: 'learn-2d'}
+//const room = joinRoom(config, 'web-discover')
 
-const chatDiv = document.getElementById('chat');
-const msgInput = document.getElementById('msgInput');
-const sendBtn = document.getElementById('sendBtn');
 
-const connStatus = document.getElementById('connStatus');
-const peerCount = document.getElementById('peerCount');
 
-let peers = new Set();
+const logDiv = document.getElementById('log');
+const statusCode = document.getElementById('status');
+const peerIdCode = document.getElementById('peerId');
+const peerCountCode = document.getElementById('peerCount');
 
-const [sendMsg, onMsg] = room.makeAction('chat-message');
+function log(msg) {
+  console.log(msg);
+  logDiv.textContent += `[${new Date().toLocaleTimeString()}] ${msg}\n`;
+}
 
-// 顯示接收到的訊息
-onMsg((msg, peerId) => {
-  const p = document.createElement('p');
-  p.textContent = `👤 ${peerId.slice(0, 6)}: ${msg}`;
-  chatDiv.appendChild(p);
-});
+const config = {
+  appId: 'learn-2d',
+  trackers: [
+    'wss://tracker.openwebtorrent.com',
+    'wss://tracker.btorrent.xyz',
+    'wss://tracker.fastcast.nz'
+  ]
+};
 
-// 傳送訊息
-sendBtn.addEventListener('click', () => {
-  const msg = msgInput.value.trim();
-  if (msg) {
-    sendMsg(msg);
-    const p = document.createElement('p');
-    p.textContent = `🧑‍💻 You: ${msg}`;
-    chatDiv.appendChild(p);
-    msgInput.value = '';
-  }
-});
+const room = joinRoom(config, 'trystero-diagnostic-room');
+const peers = new Set();
 
-// 監聽 Peer 加入
 room.onPeerJoin(peerId => {
+  log(`✅ Peer joined: ${peerId}`);
   peers.add(peerId);
   updateStatus();
-  const p = document.createElement('p');
-  p.textContent = `✅ ${peerId.slice(0, 6)} joined.`;
-  chatDiv.appendChild(p);
 });
 
-// 監聽 Peer 離開
 room.onPeerLeave(peerId => {
+  log(`❌ Peer left: ${peerId}`);
   peers.delete(peerId);
   updateStatus();
-  const p = document.createElement('p');
-  p.textContent = `❌ ${peerId.slice(0, 6)} left.`;
-  chatDiv.appendChild(p);
 });
+
+const [sendPing, onPing] = room.makeAction('diagnostic-ping');
+
+onPing((msg, peerId) => {
+  log(`📥 Received ping from ${peerId}`);
+});
+
+setInterval(() => {
+  sendPing('ping');
+  log(`📤 Sent ping`);
+}, 5000);
+
+// 顯示自身 Peer ID
+setTimeout(() => {
+  peerIdCode.textContent = room._selfId || 'Unknown';
+}, 1000);
+
+// 建立 WebRTC 連線以測試 ICE candidate 產生
+const rtcTest = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+
+rtcTest.createDataChannel('test');
+rtcTest.createOffer().then(offer => rtcTest.setLocalDescription(offer)).catch(console.error);
+
+rtcTest.onicecandidate = event => {
+  if (event.candidate) {
+    log(`🧊 ICE candidate created: ${event.candidate.candidate}`);
+    statusCode.textContent = 'WebRTC available';
+  } else {
+    log(`✅ ICE candidate gathering finished`);
+  }
+};
 
 // 更新 UI 狀態
 function updateStatus() {
-  peerCount.textContent = peers.size;
-  connStatus.textContent = peers.size > 0 ? 'Connected' : 'Waiting...';
+  peerCountCode.textContent = peers.size;
+  statusCode.textContent = peers.size > 0 ? 'Connected to peer(s)' : 'No peer connected';
 }
+

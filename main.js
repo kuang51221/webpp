@@ -38,7 +38,7 @@ room.onPeerLeave(peerId => {
   updateStatus();
 });
 
-const [sendPing, onPing] = room.makeAction('diagnostic-ping');
+const [sendPing, onPing] = room.makeAction('ping');
 
 onPing((msg, peerId) => {
   log(`📥 Received ping from ${peerId}`);

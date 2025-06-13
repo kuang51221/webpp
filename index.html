@@ -37,21 +37,15 @@
     import { joinRoom } from 'https://unpkg.com/trystero/firebase.mjs'
 
     // 🔧 請在這裡填入你的 Firebase config
-   // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyD8HLyXGtBX_m_qlGTSEzSwDJaqRpVF0og",
-  authDomain: "netdot-2a73d.firebaseapp.com",
-  databaseURL: "https://netdot-2a73d-default-rtdb.firebaseio.com",
-  projectId: "netdot-2a73d",
-  storageBucket: "netdot-2a73d.firebasestorage.app",
-  messagingSenderId: "560775014527",
-  appId: "1:560775014527:web:b8c9f0885d47df332cf74a"
-}
+    const firebaseConfig = {
+    apiKey: "AIzaSyD8HLyXGtBX_m_qlGTSEzSwDJaqRpVF0og",
+    authDomain: "netdot-2a73d.firebaseapp.com",
+    databaseURL: "https://netdot-2a73d-default-rtdb.firebaseio.com",
+    projectId: "netdot-2a73d",
+    storageBucket: "netdot-2a73d.firebasestorage.app",
+    messagingSenderId: "560775014527",
+    appId: "1:560775014527:web:b8c9f0885d47df332cf74a"
+    }
 
     const app = initializeApp(firebaseConfig)
     const db = getDatabase(app)
@@ -105,3 +99,15 @@ const firebaseConfig = {
       const msg = messageInput.value
       if (!msg || !send) return
       send(msg)
+      logMessage(msg)
+      messageInput.value = ''
+    }
+
+    setupRoom(roomInput.value)
+
+    roomInput.addEventListener('change', () => {
+      location.reload() // 重新加入房間
+    })
+  </script>
+</body>
+</html>

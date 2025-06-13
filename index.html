@@ -51,11 +51,9 @@
     messages.appendChild(p)
     messages.scrollTop = messages.scrollHeight
     }
-  function setupRoom(roomName) {
-      const { send: _send, onPeerJoin, onPeerLeave, onMessage } = joinRoom(
-        { appId: 'trystero-firebase-demo', room: roomName },
-        { app, database: db }
-      )
+   //function setupRoom(roomName) {
+      //const config = {} // uses default WebTorrent signaling servers
+      //const { send: _send, onPeerJoin, onPeerLeave, onMessage } = joinRoom({ appId: 'trystero-demo', room: roomName }, config)
 
     send = _send('chat')
     updateStatus()

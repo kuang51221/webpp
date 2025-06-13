@@ -1,6 +1,5 @@
 import { joinRoom } from './trystero-torrent.min.js';
-
-const config = {}; // 可以填入 WebTorrent 設定（通常不用）
+const config = {appId: 'learn-trystero'}
 const room = joinRoom(config, 'p2p-chat-room');
 
 const chatDiv = document.getElementById('chat');

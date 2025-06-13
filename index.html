@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trystero Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/trystero@0.8.0/dist/trystero.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Trystero Chat Demo</h1>
+    
+    <div class="room-controls">
+      <input type="text" id="roomInput" placeholder="输入房间名">
+      <button id="joinBtn">加入房间</button>
+    </div>
+    
+    <div id="chatContainer" class="hidden">
+      <div id="messages"></div>
+      <div class="message-input">
+        <input type="text" id="messageInput" placeholder="输入消息...">
+        <button id="sendBtn">发送</button>
+      </div>
+    </div>
+    
+    <div id="peerCount">房间人数: 0</div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,29 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <title>Trystero WebRTC 診斷工具</title>
+  <meta charset="UTF-8" />
+  <title>Trystero WebRTC 診斷頁</title>
   <style>
-    body { font-family: sans-serif; padding: 2em; }
-    code { background: #eee; padding: 2px 4px; border-radius: 4px; }
-    .log { white-space: pre-wrap; background: #f7f7f7; padding: 1em; border-radius: 6px; margin-top: 1em; }
+    body { font-family: sans-serif; padding: 1em; }
+    code { background: #eee; padding: 2px 5px; border-radius: 4px; }
+    #log { white-space: pre-wrap; background: #f7f7f7; padding: 1em; border-radius: 6px; margin-top: 1em; height: 200px; overflow-y: auto; }
   </style>
 </head>
 <body>
-  <h1>🔍 Trystero / WebRTC 診斷工具</h1>
-
-  <p>這個頁面會幫助你測試：</p>
-  <ul>
-    <li>是否連到 <strong>WebTorrent tracker</strong></li>
-    <li>是否能產生 <strong>WebRTC ICE candidate</strong></li>
-    <li>是否有連上其他 peer</li>
-  </ul>
-
-  <div><strong>Peer ID:</strong> <code id="peerId">loading...</code></div>
-  <div><strong>Status:</strong> <code id="status">Connecting...</code></div>
-  <div><strong>Connected Peers:</strong> <code id="peerCount">0</code></div>
-
-  <div class="log" id="log"></div>
+  <h1>Trystero WebRTC 診斷頁</h1>
+  <p>自身 Peer ID：<code id="selfId">載入中...</code></p>
+  <p>連線狀態：<code id="status">連線中...</code></p>
+  <p>連線 Peer 數：<code id="peerCount">0</code></p>
+  <p>連線的 Peer ID 列表：</p>
+  <ul id="peerList"></ul>
+  <div id="log"></div>
 
   <script type="module" src="main.js"></script>
 </body>

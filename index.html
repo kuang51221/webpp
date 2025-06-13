@@ -32,8 +32,8 @@
 
   <script type="module">
     import { joinRoom } from './trystero-torrent.min.js'
-    const config = {appId: 'webrtc-discover-2D'}
-    const room = joinRoom(config, 'discover')
+    //const config = {appId: 'webrtc-discover-2D'}
+    //const room = joinRoom(config, 'discover')
     const roomInput = document.getElementById('roomName')
     const messages = document.getElementById('messages')
     const messageInput = document.getElementById('messageInput')
@@ -51,9 +51,9 @@
     messages.appendChild(p)
     messages.scrollTop = messages.scrollHeight
     }
-   //function setupRoom(roomName) {
-      //const config = {} // uses default WebTorrent signaling servers
-      //const { send: _send, onPeerJoin, onPeerLeave, onMessage } = joinRoom({ appId: 'trystero-demo', room: roomName }, config)
+   function setupRoom(roomName) {
+    const config = {} // uses default WebTorrent signaling servers
+    const { send: _send, onPeerJoin, onPeerLeave, onMessage } = joinRoom({ appId: 'trystero-demo', room: roomName }, config)
 
     send = _send('chat')
     updateStatus()

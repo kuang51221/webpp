@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Trystero Chat Demo</title>
+  <title>Trystero Chat (Firebase)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -23,22 +23,44 @@
   </style>
 </head>
 <body>
-  <h1>🗨️ Trystero Chat</h1>
+  <h1>🗨️ Trystero Chat (Firebase)</h1>
   <p>Room Name: <input id="roomName" value="demo-room" /></p>
   <p>Status: <span id="connectionStatus">🔄 Connecting...</span></p>
   <div id="messages"></div>
   <input type="text" id="messageInput" placeholder="Type a message..." />
   <button onclick="sendMessage()">Send</button>
-  
 
   <script type="module">
-    import { joinRoom } from 'https://unpkg.com/trystero/simple.mjs'
+    // Firebase SDK imports
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js'
+    import { getDatabase } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js'
+    import { joinRoom } from 'https://unpkg.com/trystero/firebase.mjs'
+
+    // 🔧 請在這裡填入你的 Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8HLyXGtBX_m_qlGTSEzSwDJaqRpVF0og",
+      authDomain: "netdot-2a73d.firebaseapp.com",
+      databaseURL: "https://netdot-2a73d-default-rtdb.firebaseio.com",
+      projectId: "netdot-2a73d",
+      storageBucket: "netdot-2a73d.firebasestorage.app",
+      messagingSenderId: "560775014527",
+      appId: "1:560775014527:web:e02ca859dabb60632cf74a"
+    }
+
+    const app = initializeApp(firebaseConfig)
+    const db = getDatabase(app)
 
     const roomInput = document.getElementById('roomName')
     const messages = document.getElementById('messages')
     const messageInput = document.getElementById('messageInput')
+    const status = document.getElementById('connectionStatus')
 
     let send
+    let peerCount = 0
+
+    function updateStatus() {
+      status.textContent = peerCount > 0 ? '✅ Connected' : '❌ Disconnected'
+    }
 
     function logMessage(msg, from = 'You') {
       const p = document.createElement('p')
@@ -48,21 +70,28 @@
     }
 
     function setupRoom(roomName) {
-      const config = {} // uses default WebTorrent signaling servers
-      const { send: _send, onPeerJoin, onPeerLeave, onMessage } = joinRoom({ appId: 'trystero-demo', room: roomName }, config)
+      const { send: _send, onPeerJoin, onPeerLeave, onMessage } = joinRoom(
+        { appId: 'trystero-firebase-demo', room: roomName },
+        { app, database: db }
+      )
 
       send = _send('chat')
+      updateStatus()
 
       onMessage('chat', (msg, peerId) => {
         logMessage(msg, `Peer ${peerId.slice(0, 4)}`)
       })
 
       onPeerJoin(peerId => {
-        logMessage(`Peer ${peerId.slice(0, 4)} joined the room`, 'System')
+        peerCount++
+        logMessage(`Peer ${peerId.slice(0, 4)} joined`, 'System')
+        updateStatus()
       })
 
       onPeerLeave(peerId => {
-        logMessage(`Peer ${peerId.slice(0, 4)} left the room`, 'System')
+        peerCount = Math.max(0, peerCount - 1)
+        logMessage(`Peer ${peerId.slice(0, 4)} left`, 'System')
+        updateStatus()
       })
     }
 
@@ -70,16 +99,3 @@
       const msg = messageInput.value
       if (!msg || !send) return
       send(msg)
-      logMessage(msg)
-      messageInput.value = ''
-    }
-
-    // Auto-join default room
-    setupRoom(roomInput.value)
-
-    roomInput.addEventListener('change', () => {
-      location.reload() // simple way to rejoin new room
-    })
-  </script>
-</body>
-</html>

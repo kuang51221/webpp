@@ -1,93 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Trystero Chat Demo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 2rem;
-    }
-    #messages {
-      border: 1px solid #ccc;
-      height: 300px;
-      overflow-y: scroll;
-      padding: 1rem;
-      margin-bottom: 1rem;
-    }
-    input, button {
-      padding: 0.5rem;
-      font-size: 1rem;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Trystero Chat</title>
 </head>
 <body>
-  <h1>🗨️ Trystero Chat</h1>
-  <p>Room Name: <input id="roomName" value="demo-room" /></p>
-  <p>Status: <span id="connectionStatus">🔄 Connecting...</span></p>
-  <div id="messages"></div>
-  <input type="text" id="messageInput" placeholder="Type a message..." />
-  <button onclick="sendMessage()">Send</button>
+  <h1>🗨️ Trystero P2P Chat</h1>
+  <div id="chat"></div>
+  <input type="text" id="msgInput" placeholder="Enter message..." />
+  <button id="sendBtn">Send</button>
 
-  <script type="module">
-    import { joinRoom } from './trystero-torrent.min.js'
-    //const config = {appId: 'webrtc-discover-2D'}
-    //const room = joinRoom(config, 'discover')
-    const roomInput = document.getElementById('roomName')
-    const messages = document.getElementById('messages')
-    const messageInput = document.getElementById('messageInput')
-    const status = document.getElementById('connectionStatus')
-    let send
-    let peerCount = 0
-    room.onPeerJoin(peerId => console.log(`${peerId} joined`))
-    room.onPeerLeave(peerId => console.log(`${peerId} left`))
-    function updateStatus() {
-      status.textContent = peerCount > 0 ? '✅ Connected' : '❌ Disconnected'
-    }
-   function logMessage(msg, from = 'You') {
-    const p = document.createElement('p')
-    p.textContent = `${from}: ${msg}`
-    messages.appendChild(p)
-    messages.scrollTop = messages.scrollHeight
-    }
-   function setupRoom(roomName) {
-    const config = {} // uses default WebTorrent signaling servers
-    const { send: _send, onPeerJoin, onPeerLeave, onMessage } = joinRoom({ appId: 'trystero-demo', room: roomName }, config)
-
-    send = _send('chat')
-    updateStatus()
-    
-    onMessage('chat', (msg, peerId) => {
-        logMessage(msg, `Peer ${peerId.slice(0, 4)}`)
-      })
-
-    onPeerJoin(peerId => {
-      peerCount++
-      logMessage(`Peer ${peerId.slice(0, 4)} joined`, 'System')
-      updateStatus()
-      })
-    onPeerLeave(peerId => {
-        peerCount = Math.max(0, peerCount - 1)
-        logMessage(`Peer ${peerId.slice(0, 4)} left`, 'System')
-        updateStatus()
-      })
-    }
-    function sendMessage() {
-      const msg = messageInput.value
-      if (!msg || !send) return
-      send(msg)
-      logMessage(msg)
-      messageInput.value = ''
-    }
-    
-    setupRoom(roomInput.value)
-
-    roomInput.addEventListener('change', () => {
-      location.reload() // 重新加入房間
-    })
-    
-    
-  </script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>

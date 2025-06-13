@@ -1,7 +1,7 @@
 // 配置 Trystero 使用 Torrent 傳輸方式
 const config = {
-  appId: 'trystero-torrent-demo', // 你可以更改這個ID
-  rootPath: 'trystero-torrent-demo'
+  appId: 'webpp', // 你可以更改這個ID
+  rootPath: 'webpp'
 };
 
 // 創建 WebTorrent 實例

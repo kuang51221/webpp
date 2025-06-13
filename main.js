@@ -15,9 +15,8 @@ function log(msg) {
 }
 
 const config = {
-appId: 'learn-2d',
+  appId: 'learn-2d',
   trackers: [
-    
     'wss://tracker.openwebtorrent.com',
     'wss://tracker.btorrent.xyz',
     'wss://tracker.fastcast.nz',

@@ -25,10 +25,11 @@
 <body>
   <h1>🗨️ Trystero Chat</h1>
   <p>Room Name: <input id="roomName" value="demo-room" /></p>
+  <p>Status: <span id="connectionStatus">🔄 Connecting...</span></p>
   <div id="messages"></div>
   <input type="text" id="messageInput" placeholder="Type a message..." />
   <button onclick="sendMessage()">Send</button>
-  <p>Status: <span id="connectionStatus">🔄 Connecting...</span></p>
+  
 
   <script type="module">
     import { joinRoom } from 'https://unpkg.com/trystero/simple.mjs'

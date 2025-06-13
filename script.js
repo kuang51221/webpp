@@ -126,3 +126,24 @@ function addMessage(text, sender) {
 function updatePeerCount() {
   peerCountDiv.textContent = `房間人數: ${peers.size + 1}`;
 }
+// 新增狀態邏輯
+const status = document.getElementById('connectionStatus')
+let peerCount = 0
+
+function updateStatus() {
+  status.textContent = peerCount > 0 ? '✅ Connected' : '❌ Disconnected'
+}
+//加入 setupRoom() 中的事件處理器
+onPeerJoin(peerId => {
+  peerCount++
+  logMessage(`Peer ${peerId.slice(0, 4)} joined the room`, 'System')
+  updateStatus()
+})
+
+onPeerLeave(peerId => {
+  peerCount = Math.max(0, peerCount - 1)
+  logMessage(`Peer ${peerId.slice(0, 4)} left the room`, 'System')
+  updateStatus()
+})
+
+

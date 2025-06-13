@@ -6,7 +6,14 @@
 </head>
 <body>
   <h1>🗨️ Trystero P2P Chat</h1>
-  <div id="chat"></div>
+
+  <div id="status">
+    🔌 Status: <span id="connStatus">Connecting...</span><br>
+    👥 Peers: <span id="peerCount">0</span>
+  </div>
+
+  <div id="chat" style="margin-top: 1em;"></div>
+
   <input type="text" id="msgInput" placeholder="Enter message..." />
   <button id="sendBtn">Send</button>
 

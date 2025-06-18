@@ -78,6 +78,13 @@ const room = joinRoom(config, 'myRoom')
 
 const localVideo = document.getElementById('localVideo')
 const remoteVideo = document.getElementById('remoteVideo')
+// iOS 手機使用時，必須增加的屬性
+localVideo.setAttribute("autoplay", "");
+localVideo.setAttribute("muted", "");
+localVideo.setAttribute("playsinline", "");
+remoteVideo.setAttribute("autoplay", "");
+remoteVideo.setAttribute("muted", "");
+remoteVideo.setAttribute("playsinline", "");
   
 room.onPeerJoin(peerId => console.log(`${peerId} joined`))
   

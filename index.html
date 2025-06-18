@@ -6,19 +6,7 @@
   <title>本地托管的 WebRTC 聊天室</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-    video { background: #000; width: 300px; height: 225px; }
-    #remoteVideos { display: flex; flex-wrap: wrap; gap: 10px; }
-    .video-container { border: 1px solid #ccc; padding: 10px; }
-    #chat-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100vh;
-  background-color: #1e1e1e;
-  color: white;
-  font-family: sans-serif;
-}
-
+  
 #video-section {
   display: flex;
   justify-content: space-around;
@@ -89,16 +77,15 @@ const room = joinRoom(config, 'myRoom')
 
 const localVideo = document.getElementById('localVideo')
 const remoteVideo = document.getElementById('remoteVideo')
+  
+room.onPeerJoin(peerId => console.log(`${peerId} joined`))
+room.onPeerStream(
+  (stream, peerId) => (peerElements[peerId].video.srcObject = stream)
+) 
+room.addStream(
+  await navigator.mediaDevices.getUserMedia({audio: true, video: true})
+)
 
-navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-  localVideo.srcObject = stream
-
-  room.addStream?.(stream)  // 某些版本可能沒有這個方法，視 trystero 版本而定
-
-  room.onStream?.(remoteStream => {
-    remoteVideo.srcObject = remoteStream
-  })
-})
  
 </script>
 </body>

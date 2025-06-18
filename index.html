@@ -82,12 +82,12 @@ const remoteVideo = document.getElementById('remoteVideo')
 room.onPeerJoin(peerId => console.log(`${peerId} joined`))
   
 // this object can store audio instances for later
-const peerAudios = {}
+//const peerAudios = {}
 
 // get a local audio stream from the microphone
 const selfStream = await navigator.mediaDevices.getUserMedia({
   audio: true,
-  video: false
+  video: true
 })
 
 // send stream to peers currently in the room
@@ -104,8 +104,8 @@ room.onPeerStream((stream, peerId) => {
   audio.srcObject = stream
   audio.autoplay = true
   remoteVideo.srcObject = stream
-  // add the audio to peerAudio object if you want to address it for something
-  // later (volume, etc.)
+  //add the audio to peerAudio object if you want to address it for something
+  //later (volume, etc.)
   peerAudios[peerId] = audio
 })
 

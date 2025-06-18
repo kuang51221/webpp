@@ -76,7 +76,6 @@ room.onPeerStream((stream, peerId) => {
   audio.srcObject = stream
   audio.autoplay = true
   peerAudios[peerId] = audio
-  //remoteVideo.srcObject = stream
 
   let video = peerVideos[peerId]
   if (!video) {

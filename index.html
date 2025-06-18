@@ -81,7 +81,7 @@ room.onPeerStream((stream, peerId) => {
   let video = peerVideos[peerId]
   if (!video) {
     video = document.createElement('video')
-    video.setAttribute("id", ${peerId});
+    video.setAttribute("id", peerId);
     // iOS 手機使用時，必須增加的屬性
     video.setAttribute("autoplay", "");
     video.setAttribute("muted", "");

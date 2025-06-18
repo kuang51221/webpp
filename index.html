@@ -84,6 +84,7 @@ room.onPeerStream((stream, peerId) => {
   if (!video) {
     video = document.createElement('video')
     video.autoplay = true
+    video.playsinline = true
   // add video element to the DOM
     remoteVideo.appendChild(video)
   }

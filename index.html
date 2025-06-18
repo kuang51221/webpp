@@ -82,9 +82,20 @@ room.onPeerJoin(peerId => console.log(`${peerId} joined`))
 room.onPeerStream(
   (stream, peerId) => (peerElements[peerId].video.srcObject = stream)
 ) 
-room.addStream(
-  await navigator.mediaDevices.getUserMedia({audio: true, video: true})
-)
+//room.addStream(
+//  await navigator.mediaDevices.getUserMedia({audio: true, video: true})
+//)
+  
+await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+  localVideo.srcObject = stream
+
+  room.addStream?.(stream)  // 某些版本可能沒有這個方法，視 trystero 版本而定
+
+  room.onStream?.(remoteStream => {
+    remoteVideo.srcObject = remoteStream
+  })
+
+
 
  
 </script>

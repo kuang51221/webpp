@@ -1,3 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>本地托管的 WebRTC 聊天室</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    video { background: #000; width: 300px; height: 225px; }
+    #remoteVideos { display: flex; flex-wrap: wrap; gap: 10px; }
+    .video-container { border: 1px solid #ccc; padding: 10px; }
+    #chat-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #1e1e1e;
+  color: white;
+  font-family: sans-serif;
+}
+
+#video-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+video {
+  width: 45%;
+  border-radius: 8px;
+  background: black;
+}
+
+#controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px;
+}
+
+#chat-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+#chat-log {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid #555;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+#chat-input {
+  padding: 8px;
+  width: 80%;
+}
+
+#send-message {
+  padding: 8px;
+}
+  </style>
+</head>
+<body>
 <div id="chat-container">
   <div id="video-section">
     <video id="localVideo" autoplay muted></video>
@@ -16,3 +82,25 @@
     <button id="send-message">傳送</button>
   </div>
 </div>
+<script type="module">
+import {joinRoom} from './trystero-torrent.min.js'
+const config = { appId: 'my-video-app' }
+const room = joinRoom(config, 'myRoom')
+
+const localVideo = document.getElementById('localVideo')
+const remoteVideo = document.getElementById('remoteVideo')
+
+navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+  localVideo.srcObject = stream
+
+  room.addStream?.(stream)  // 某些版本可能沒有這個方法，視 trystero 版本而定
+
+  room.onStream?.(remoteStream => {
+    remoteVideo.srcObject = remoteStream
+  })
+})
+ 
+</script>
+</body>
+</html>
+

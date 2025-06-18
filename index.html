@@ -60,12 +60,12 @@ const peerVideos = {}
 // get a local audio stream from the microphone
 const selfStream = await navigator.mediaDevices.getUserMedia({
   audio: true,
-  video: false
+  video: true
 })
 
 // send stream to peers currently in the room
 room.addStream(selfStream)
-//localVideo.srcObject = selfStream
+localVideo.srcObject = selfStream
 
 // send stream to peers who join later
 room.onPeerJoin(peerId => room.addStream(selfStream, peerId))
@@ -75,20 +75,15 @@ room.onPeerStream((stream, peerId) => {
   const audio = new Audio()
   audio.srcObject = stream
   audio.autoplay = true
-  
   peerAudios[peerId] = audio
-}) 
-room.onPeerStream((stream, peerId) => {
+  
   let video = peerVideos[peerId]
-
   if (!video) {
     video = document.createElement('video')
     video.autoplay = true
     video.playsinline = true
-  // add video element to the DOM
     remoteVideo.appendChild(video)
-  }
-
+      }
   video.srcObject = stream
   peerVideos[peerId] = video
   

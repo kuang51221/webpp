@@ -21,7 +21,7 @@ video { width: 45%;border-radius: 8px;background: black;}
 <div id="chat-container">
   <div id="video-section">
     <video id="localVideo" autoplay muted playsinline></video>
-    <video id="remoteVideo" autoplay playsinline></video>
+    <div id="remoteVideo" autoplay playsinline></div>
   </div>
 
   <div id="controls">
@@ -77,20 +77,16 @@ room.onPeerStream((stream, peerId) => {
   audio.autoplay = true
   peerAudios[peerId] = audio
   //remoteVideo.srcObject = stream
-  let rvideo = peerVideos[peerId]
-  rvideo = document.createElement('video')
-  remoteVideo.appendChild(rvideo)
-  rvideo.srcObject = stream
-  peerVideos[peerId] = rvideo
-  //let video = peerVideos[peerId]
-  //if (!video) {
-  //  video = document.createElement('video')
-  //  video.autoplay = true
-  //  video.playsinline = true
-  //  remoteVideo.appendChild(video)
-  //    }
-  //video.srcObject = stream
-  //peerVideos[peerId] = video
+
+  let video = peerVideos[peerId]
+  if (!video) {
+    video = document.createElement('video')
+    video.autoplay = true
+    video.playsinline = true
+    remoteVideo.appendChild(video)
+    }
+  video.srcObject = stream
+  peerVideos[peerId] = video
   
 })
 

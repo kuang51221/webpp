@@ -76,7 +76,7 @@ room.onPeerStream((stream, peerId) => {
   audio.srcObject = stream
   audio.autoplay = true
   peerAudios[peerId] = audio
-  remoteVideo.srcObject = stream
+  //remoteVideo.srcObject = stream
   let video
   video = document.createElement('video')
   remoteVideo.appendChild(video)

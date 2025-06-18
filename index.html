@@ -94,7 +94,7 @@ await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(str
   room.onStream?.(remoteStream => {
     remoteVideo.srcObject = remoteStream
   })
-
+})
 
 
  

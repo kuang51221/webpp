@@ -76,16 +76,17 @@ room.onPeerStream((stream, peerId) => {
   audio.srcObject = stream
   audio.autoplay = true
   peerAudios[peerId] = audio
+  remoteVideo.srcObject = stream
   
-  let video = peerVideos[peerId]
-  if (!video) {
-    video = document.createElement('video')
-    video.autoplay = true
-    video.playsinline = true
-    remoteVideo.appendChild(video)
-      }
-  video.srcObject = stream
-  peerVideos[peerId] = video
+  //let video = peerVideos[peerId]
+  //if (!video) {
+  //  video = document.createElement('video')
+  //  video.autoplay = true
+  //  video.playsinline = true
+  //  remoteVideo.appendChild(video)
+  //    }
+  //video.srcObject = stream
+  //peerVideos[peerId] = video
   
 })
 

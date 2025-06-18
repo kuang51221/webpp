@@ -50,7 +50,6 @@ const peerVideos = {}
 room.onPeerJoin(peerId => console.log(`${peerId} joined`))
 room.onPeerLeave(peerId => {
   console.log(`${peerId} left`);
-  delete animals.Cow;
   delete peerAudios.peerId;                   
   delete peerVideos.peerId;  
   let peerDiv = document.getElementById(peerId);

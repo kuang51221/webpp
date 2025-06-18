@@ -43,21 +43,22 @@ const room = joinRoom(config, 'myRoom')
 
 const localVideo = document.getElementById('localVideo')
 const remoteVideo = document.getElementById('remoteVideo')
-// iOS 手機使用時，必須增加的屬性
-//localVideo.setAttribute("autoplay", "");
-//localVideo.setAttribute("muted", "");
-//localVideo.setAttribute("playsinline", "");
-  
-//remoteVideo.setAttribute("autoplay", "");
-//remoteVideo.setAttribute("playsinline", "");
+
+const peerAudios = {}
+const peerVideos = {}  
   
 room.onPeerJoin(peerId => console.log(`${peerId} joined`))
-  
-// this object can store audio instances for later
-const peerAudios = {}
-const peerVideos = {}
+room.onPeerLeave(peerId => {
+  console.log(`${peerId} left`);
+  peerAudios.delete(${peerId});                   
+  peerVideos.delete(${peerId});  
+  let peerDiv = document.getElementById(${peerId});
+    if (peerDiv) {
+        peerDiv.remove(); // Removes the div element from the DOM
+    };
+});
 
-// get a local audio stream from the microphone
+// get a local video,audio stream from the microphone
 const selfStream = await navigator.mediaDevices.getUserMedia({
   audio: true,
   video: true
@@ -80,6 +81,8 @@ room.onPeerStream((stream, peerId) => {
   let video = peerVideos[peerId]
   if (!video) {
     video = document.createElement('video')
+    video.setAttribute("id", ${peerId});
+    // iOS 手機使用時，必須增加的屬性
     video.setAttribute("autoplay", "");
     video.setAttribute("muted", "");
     video.setAttribute("playsinline", "");

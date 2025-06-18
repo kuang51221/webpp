@@ -8,48 +8,13 @@
   <style>
     body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
   
-#video-section {
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-}
-
-video {
-  width: 45%;
-  border-radius: 8px;
-  background: black;
-}
-
-#controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 10px;
-}
-
-#chat-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
-#chat-log {
-  flex: 1;
-  overflow-y: auto;
-  border: 1px solid #555;
-  padding: 5px;
-  margin-bottom: 10px;
-}
-
-#chat-input {
-  padding: 8px;
-  width: 80%;
-}
-
-#send-message {
-  padding: 8px;
-}
+#video-section {display: flex;justify-content: space-around;padding: 10px;}
+video { width: 45%;border-radius: 8px;background: black;}
+#controls { display: flex; justify-content: center; gap: 10px; margin: 10px;}
+#chat-section { flex: 1;display: flex; flex-direction: column;padding: 10px;}
+#chat-log {flex: 1; overflow-y: auto; border: 1px solid #555; padding: 5px; margin-bottom: 10px;}
+#chat-input {padding: 8px;width: 80%;}
+#send-message {padding: 8px;}
   </style>
 </head>
 <body>
@@ -89,31 +54,43 @@ const remoteVideo = document.getElementById('remoteVideo')
 room.onPeerJoin(peerId => console.log(`${peerId} joined`))
   
 // this object can store audio instances for later
-//const peerAudios = {}
+const peerAudios = {}
+const peerVideos = {}
 
 // get a local audio stream from the microphone
 const selfStream = await navigator.mediaDevices.getUserMedia({
   audio: true,
-  video: true
+  video: false
 })
 
 // send stream to peers currently in the room
 room.addStream(selfStream)
-localVideo.srcObject = selfStream
+//localVideo.srcObject = selfStream
 
 // send stream to peers who join later
 room.onPeerJoin(peerId => room.addStream(selfStream, peerId))
 
 // handle streams from other peers
 room.onPeerStream((stream, peerId) => {
-  // create an audio instance and set the incoming stream
   const audio = new Audio()
   audio.srcObject = stream
   audio.autoplay = true
-  remoteVideo.srcObject = stream
-  //add the audio to peerAudio object if you want to address it for something
-  //later (volume, etc.)
+  
   peerAudios[peerId] = audio
+}) 
+room.onPeerStream((stream, peerId) => {
+  let video = peerVideos[peerId]
+
+  if (!video) {
+    video = document.createElement('video')
+    video.autoplay = true
+  // add video element to the DOM
+    remoteVideo.appendChild(video)
+  }
+
+  video.srcObject = stream
+  peerVideos[peerId] = video
+  
 })
 
 

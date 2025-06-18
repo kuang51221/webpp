@@ -1,23 +1,18 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8" />
-  <title>Trystero WebRTC 診斷頁</title>
-  <style>
-    body { font-family: sans-serif; padding: 1em; }
-    code { background: #eee; padding: 2px 5px; border-radius: 4px; }
-    #log { white-space: pre-wrap; background: #f7f7f7; padding: 1em; border-radius: 6px; margin-top: 1em; height: 200px; overflow-y: auto; }
-  </style>
-</head>
-<body>
-  <h1>Trystero WebRTC 診斷頁</h1>
-  <p>自身 Peer ID：<code id="selfId">載入中...</code></p>
-  <p>連線狀態：<code id="status">連線中...</code></p>
-  <p>連線 Peer 數：<code id="peerCount">0</code></p>
-  <p>連線的 Peer ID 列表：</p>
-  <ul id="peerList"></ul>
-  <div id="log"></div>
+<div id="chat-container">
+  <div id="video-section">
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+  </div>
 
-  <script type="module" src="main.js"></script>
-</body>
-</html>
+  <div id="controls">
+    <button id="toggleAudio">🎤 靜音</button>
+    <button id="toggleVideo">📷 關閉鏡頭</button>
+    <button id="leaveRoom">🚪 離開</button>
+  </div>
+
+  <div id="chat-section">
+    <div id="chat-log"></div>
+    <input type="text" id="chat-input" placeholder="輸入訊息...">
+    <button id="send-message">傳送</button>
+  </div>
+</div>

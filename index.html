@@ -79,22 +79,34 @@ const localVideo = document.getElementById('localVideo')
 const remoteVideo = document.getElementById('remoteVideo')
   
 room.onPeerJoin(peerId => console.log(`${peerId} joined`))
-room.onPeerStream(
-  (stream, peerId) => (peerElements[peerId].video.srcObject = stream)
-) 
-//room.addStream(
-//  await navigator.mediaDevices.getUserMedia({audio: true, video: true})
-//)
   
-await navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-  localVideo.srcObject = stream
+// this object can store audio instances for later
+const peerAudios = {}
 
-  room.addStream?.(stream)  // 某些版本可能沒有這個方法，視 trystero 版本而定
-
-  room.onStream?.(remoteStream => {
-    remoteVideo.srcObject = remoteStream
-  })
+// get a local audio stream from the microphone
+const selfStream = await navigator.mediaDevices.getUserMedia({
+  audio: true,
+  video: false
 })
+
+// send stream to peers currently in the room
+room.addStream(selfStream)
+
+// send stream to peers who join later
+room.onPeerJoin(peerId => room.addStream(selfStream, peerId))
+
+// handle streams from other peers
+room.onPeerStream((stream, peerId) => {
+  // create an audio instance and set the incoming stream
+  const audio = new Audio()
+  audio.srcObject = stream
+  audio.autoplay = true
+
+  // add the audio to peerAudio object if you want to address it for something
+  // later (volume, etc.)
+  peerAudios[peerId] = audio
+})
+
 
 
  
